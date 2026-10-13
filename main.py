@@ -9,9 +9,9 @@ from matplotlib.patches import Arc
 # Standard math library.
 import math
 
-########################
-# MAIN VARIABLES
-########################
+##################
+# MAIN VARIABLES #
+##################
 
 # Number of Fibonacci terms, n.
 n_terms: int = 0
@@ -20,9 +20,9 @@ prev, curr = 0, 1
 # List that contains each Fibonacci term.
 fib_seq = []
 
-###########
-# FUNCTIONS
-###########
+#############
+# FUNCTIONS #
+#############
 
 # Function that computes the limit-of-ratio operation between consecutive Fibonacci terms.
 # The definition states that the larger the term position,
@@ -136,9 +136,9 @@ def draw_golden_spiral():
     # block=True ensures the program waits until the user closes the window.
     plt.show(block=True)
 
-############
-# EXECUTION
-############
+#############
+# EXECUTION #
+#############
 
 # If this module is the main program, execute the registered events.
 if __name__ == "__main__":
