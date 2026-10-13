@@ -1,179 +1,170 @@
 ################
-# DEPENDÊNCIAS #
+# DEPENDENCIES #
 ################
 
-# Biblioteca para a impressão de planos cartesianos.
+# Library for plotting Cartesian planes.
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 
-# Biblioteca padrão de aritmética.
+# Standard math library.
 import math
 
 ########################
-# VARIÁVEIS PRINCIPAIS #
+# MAIN VARIABLES
 ########################
 
-# Quantidade de termos de F, n.
-n_termos: int = 0
-# Número anterior e o atual.
-a, b = 0, 1
-# Array que contém cada termo, F.
-fib = []
+# Number of Fibonacci terms, n.
+n_terms: int = 0
+# Previous and current numbers.
+prev, curr = 0, 1
+# List that contains each Fibonacci term.
+fib_seq = []
 
 ###########
-# FUNÇÕES #
+# FUNCTIONS
 ###########
 
-# Função que realiza a operação do limite da razão entre termos consecutivos de Fibonacci.
-# Consiste na definição de que quanto maior a posição do termo em, 
-# F(n) / F(n-1), ele será mais próximo da constante da proporção áurea,
-# representada por phi (ϕ), 1,618...
-def gerarConvergenciaAurea():
-    # Array que guarda as razões.
-    razoes = []
-    # Array que guarda a posição do termo (Importante para constituir o eixo X do gráfico).
+# Function that computes the limit-of-ratio operation between consecutive Fibonacci terms.
+# The definition states that the larger the term position,
+# F(n) / F(n-1) will be closer to the golden ratio constant,
+# represented by phi (ϕ) ≈ 1.618...
+def generate_golden_ratio_convergence():
+    # List that stores the ratios.
+    ratios = []
+    # List that stores the term positions (important for the X axis of the plot).
     indices = []
-    # Para cada posição entre 2 e o tamanho da sequência fibonacci calculada.
-    # Adicione a razão de termo encontrado no index i, que corresponde diretamente a posição do termo e
-    # divida pelo termo da posição anterior.
-    # Em seguida guarda cada valor obtido nos respectivos arrays. 
-    for i in range(2, len(fib)):
-        razao = fib[i] / fib[i-1]
-        razoes.append(razao)
+    # For each position between 2 and the length of the calculated Fibonacci sequence,
+    # add the ratio of the term at index i divided by the previous term,
+    # then store each obtained value in the respective lists.
+    for i in range(2, len(fib_seq)):
+        ratio = fib_seq[i] / fib_seq[i-1]
+        ratios.append(ratio)
         indices.append(i)
 
-    # Retorno da função
-    return indices, razoes
+    # Function return
+    return indices, ratios
 
-# Função para imprimir o gráfico.
-def plotarGrafico():
-    # Pegamos os valores obtidos dos eixo X e Y na outra função que gera o cálculo dele para nós.
-    indices, razoes = gerarConvergenciaAurea()
+# Function to plot the convergence graph.
+def plot_graph():
+    # Get the X and Y values from the function that computes them for us.
+    indices, ratios = generate_golden_ratio_convergence()
 
-    # Constante da Proporção Aurea, representada por phi (ϕ).
-    # Não é utilizado o valor constante diretamente, pois ele constitui-se
-    # em um valor decimal infinito e não periódico, definido por:
-    # 1 mais raiz de 5, tudo sobre 2.
-    proporcao_aurea = (1 + math.sqrt(5)) / 2
+    # Golden ratio constant, represented by phi (ϕ).
+    # The constant itself is not used as a raw repeating decimal since it is an irrational number,
+    # defined by: (1 + sqrt(5)) / 2.
+    golden_ratio = (1 + math.sqrt(5)) / 2
 
-    # Força o gráfico aparecer em uma janela separada (Importante, pois no mesmo código é impresso outro plano).
+    # Force the plot to appear in a separate window (important because another plot will also be shown).
     plt.figure()
-    # Impressão do gráfico.
+    # Plot the ratios.
     plt.plot(
         indices,
-        razoes,
+        ratios,
         marker="o",
         color="blue",
-        label="Razão F(n) / F(n-1)"
+        label="Ratio F(n) / F(n-1)"
     )
 
-    # Criação de uma linha paralela ao eixo X, Constante da Proporção Aurea,
-    # para fins de comparação do valor obtido com a proximidade a constante.
+    # Create a horizontal line at the exact golden ratio for comparison.
     plt.axhline(
-        y=proporcao_aurea, 
-        color='red', 
-        linestyle='--', 
-        label=f'Proporção Áurea Exata ({proporcao_aurea:.4f})'
+        y=golden_ratio,
+        color='red',
+        linestyle='--',
+        label=f'Exact Golden Ratio ({golden_ratio:.4f})'
     )
 
-    # Definição das propriedades dos elementos gráficos.
-    plt.title('Convergência da Sequência de Fibonacci para a Proporção Áurea (Partindo do 3° Termo)')
-    plt.xlabel('Posição do Termo (n)')
-    plt.ylabel('Valor da Razão')
+    # Define plot properties.
+    plt.title('Convergence of the Fibonacci Sequence to the Golden Ratio (Starting from the 3rd Term)')
+    plt.xlabel('Term Position (n)')
+    plt.ylabel('Ratio Value')
     plt.grid(True)
     plt.legend()
 
-    # Ativa o modo interativo.
+    # Turn on interactive mode and show the plot.
     plt.ion()
-    # Mostra a impressão.
     plt.show()
 
-# Função responsável por desenhar a espiral aurea.
-def desenharEspiralAurea():
-    # Ela retorna dois objetos, a Janela Inteira e o Eixo do desenho, respectivamente.
+# Function responsible for drawing the golden spiral.
+def draw_golden_spiral():
+    # Returns the figure and axis for drawing.
     fig, ax = plt.subplots(figsize=(8, 8))
-    # Posição inicial.
+    # Initial position.
     x, y = 0, 0
-    # As direções.
-    direcoes = [(0, -1), (-1, -1), (-1, 0), (0, 0)]
+    # Directions used to place squares/arcs.
+    directions = [(0, -1), (-1, -1), (-1, 0), (0, 0)]
 
-    # Para cada termo e lado:
-    for i, lado in enumerate(fib):
-        # A direção do termo é definida pelo resto da divisão do termo.
-        dir_x, dir_y = direcoes[i % 4]
+    # For each term (side length) in the Fibonacci sequence:
+    for i, side in enumerate(fib_seq):
+        # The direction for this term is determined by i modulo 4.
+        dir_x, dir_y = directions[i % 4]
 
-        # A origem do termo.
-        origem_x = x + dir_x * lado
-        origem_y = y + dir_y * lado
+        # Origin of the current square.
+        origin_x = x + dir_x * side
+        origin_y = y + dir_y * side
 
-        # Definição das propriedades do arco a depender da direção dele.
+        # Define arc properties depending on direction.
         if i % 4 == 0:
-            centro_arco = (origem_x, origem_y)
-            angulo_inicio, angulo_fim = 0, 90
-            x, y = origem_x + lado, origem_y
+            arc_center = (origin_x, origin_y)
+            angle_start, angle_end = 0, 90
+            x, y = origin_x + side, origin_y
         elif i % 4 == 1:
-            centro_arco = (origem_x, origem_y + lado)
-            angulo_inicio, angulo_fim = 270, 0
-            x, y = origem_x, origem_y
+            arc_center = (origin_x, origin_y + side)
+            angle_start, angle_end = 270, 0
+            x, y = origin_x, origin_y
         elif i % 4 == 2:
-            centro_arco = (origem_x + lado, origem_y + lado)
-            angulo_inicio, angulo_fim = 180, 270
-            x, y = origem_x, origem_y + lado
+            arc_center = (origin_x + side, origin_y + side)
+            angle_start, angle_end = 180, 270
+            x, y = origin_x, origin_y + side
         elif i % 4 == 3:
-            centro_arco = (origem_x + lado, origem_y)
-            angulo_inicio, angulo_fim = 90, 180
-            x, y = origem_x + lado, origem_y + lado
+            arc_center = (origin_x + side, origin_y)
+            angle_start, angle_end = 90, 180
+            x, y = origin_x + side, origin_y + side
 
-        # Cria e armazena o retângulo do termo.
-        quadrado = plt.Rectangle((origem_x, origem_y), lado, lado, edgecolor='gray', facecolor='none', alpha=0.5)
-        ax.add_patch(quadrado)
+        # Create and add the square patch for this term.
+        square = plt.Rectangle((origin_x, origin_y), side, side, edgecolor='gray', facecolor='none', alpha=0.5)
+        ax.add_patch(square)
 
-        # Cria e armazena o arco do termo.
-        arco = Arc(centro_arco, lado*2, lado*2, angle=0, theta1=angulo_inicio, theta2=angulo_fim, color='gold', linewidth=2)
-        ax.add_patch(arco)
+        # Create and add the arc patch for this term.
+        arc = Arc(arc_center, side*2, side*2, angle=0, theta1=angle_start, theta2=angle_end, color='gold', linewidth=2)
+        ax.add_patch(arc)
 
-    # Definição das propriedades da representação gráfica.
+    # Finalize plot properties.
     ax.set_aspect('equal', adjustable='box')
     ax.autoscale_view()
-    plt.title(f"Espiral Áurea com {len(fib)} Quadrados de Fibonacci")
+    plt.title(f"Golden Spiral with {len(fib_seq)} Fibonacci Squares")
     plt.axis('off')
-    # O "block = True" é importante, pois menciona ao programa que somente feche quando o usuário fechar a janela.
+    # block=True ensures the program waits until the user closes the window.
     plt.show(block=True)
 
 ############
-# Execução #
+# EXECUTION
 ############
 
-# Verifica se o componente é o principal e assim, executa os eventos registrados.
-# Quase equivalente ao Start do C#.
+# If this module is the main program, execute the registered events.
 if __name__ == "__main__":
 
-    # Título do projeto em Console
-    print(">> SEQUÊNCIA FIBONACCI E A PROPORÇÃO ÁUREA <<")
+    # Console project title
+    print(">> FIBONACCI SEQUENCE AND THE GOLDEN RATIO <<")
 
-    # Pede para que o usuário defina quantos termos serão calculados.
-    # Para evitar divisão com zero e números complexos ou reais,
-    # a quantidade escolhida deve ser maior que 2 (0,1,1) e pertencente aos naturais.
-    # While é para manter o loop, sem necessitar definir por conta própria um valor padrão.
-    while n_termos == 0 or n_termos <= 2:
-        # Ele executa os eventos e na espera de um erro, invés de parar a aplicação,
-        # ele executa outra cadeia de eventos.
+    # Ask the user how many terms should be calculated.
+    # To avoid division by zero and non-natural results, the chosen quantity must be greater than 2 (0, 1, 1)
+    # and an integer.
+    while n_terms == 0 or n_terms <= 2:
         try:
-            n_termos = int(input("Digite a quantidade de termos (n), [n ∈ N, n > 2]: "))
-            if (not n_termos > 2):
-                print("Por favor, digite um valor maior que 2.")
-                n_termos = 0
+            n_terms = int(input("Enter the number of terms (n), [n ∈ N, n > 2]: "))
+            if (not n_terms > 2):
+                print("Please enter a value greater than 2.")
+                n_terms = 0
         except ValueError:
-            print("Entrada inválida!")
-            n_termos = 0
+            print("Invalid input!")
+            n_terms = 0
 
-    # Cálculo dos termos.
-    # Em cada termo, a se torna b e b soma com a. Não dá erro, pois a atualização do valor apresentado na operação acontece posteriormente ao evento. 
-    for _ in range(n_termos):
-        fib.append(a)
-        a, b = b, a + b
+    # Compute the Fibonacci terms.
+    # On each iteration, prev becomes curr and curr becomes prev + curr.
+    for _ in range(n_terms):
+        fib_seq.append(prev)
+        prev, curr = curr, prev + curr
 
-    # Imprimir Gráfico.
-    plotarGrafico()
-    # Imprimir a representação gráfica do Espiral
-    desenharEspiralAurea()
+    # Plot the convergence graph and draw the golden spiral.
+    plot_graph()
+    draw_golden_spiral()
